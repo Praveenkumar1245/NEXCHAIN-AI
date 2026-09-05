@@ -1,0 +1,6 @@
+shipment_id,supplier_id,product_id,quantity,eta,warehouse_id,status,tracking_code
+SH101,S001,P101,100,2026-09-10,WH01,Delayed,TRK-ABC-101
+SH102,S002,P103,60,2026-09-08,WH02,In Transit,TRK-PRM-102
+SH103,S001,P102,50,2026-09-14,WH01,Delayed,TRK-ABC-103
+SH104,S001,P101,40,2026-09-18,WH02,Halted,TRK-ABC-104
+SH105,S003,P104,120,2026-09-12,WH03,In Transit,TRK-GLB-105

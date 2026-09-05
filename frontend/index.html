@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXCHAIN // SUPPLY CHAIN CONTROL TOWER</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="cyber-grid-overlay"></div>
+    <div class="app-container">
+        
+        <!-- TOP CYBER COMMAND NAVBAR -->
+        <header class="navbar">
+            <div class="brand">
+                <div class="logo-icon">
+                    <span class="brand-symbol">◈</span>
+                </div>
+                <div class="brand-text">
+                    <h1>NEXCHAIN</h1>
+                    <p class="tagline">SUPPLY CHAIN CONTROL TOWER</p>
+                </div>
+                <div class="brand-sub-badge">
+                    <span class="sub-tag">NEXCHAIN // PS08</span>
+                    <span class="sub-version">Detect. Trace. Decide.</span>
+                </div>
+            </div>
+            
+            <nav class="nav-tabs">
+                <button class="nav-btn active" data-tab="tab-dashboard">
+                    <i class="fa-solid fa-tower-observation"></i> CONTROL TOWER
+                </button>
+                <button class="nav-btn" data-tab="tab-analyzer">
+                    <i class="fa-solid fa-microchip"></i> DISRUPTION INTEL
+                </button>
+                <button class="nav-btn" data-tab="tab-impact">
+                    <i class="fa-solid fa-diagram-project"></i> IMPACT MAP
+                </button>
+                <button class="nav-btn" data-tab="tab-decision">
+                    <i class="fa-solid fa-brain"></i> DECISION ENGINE
+                </button>
+                <button class="nav-btn" data-tab="tab-trail">
+                    <i class="fa-solid fa-route"></i> EVIDENCE TRAIL
+                </button>
+            </nav>
+
+            <div class="system-status">
+                <span class="status-indicator live"></span>
+                <span class="status-label">● SYSTEM OPERATIONAL</span>
+            </div>
+        </header>
+
+        <!-- EXECUTIVE TOP STATUS BAR -->
+        <div class="executive-top-bar">
+            <div class="exec-bar-header">
+                <span class="exec-sys-label"><i class="fa-solid fa-circle"></i> SYSTEM OPERATIONAL</span>
+                <span class="exec-time-label" id="exec-last-analysis">LAST ANALYSIS 16:00:00</span>
+            </div>
+            <div class="exec-metrics-row">
+                <div class="exec-m-item">
+                    <span class="exec-m-lbl">ACTIVE DISRUPTIONS</span>
+                    <span class="exec-m-val mono-num" id="exec-active-dis">01</span>
+                </div>
+                <div class="exec-m-divider"></div>
+                <div class="exec-m-item">
+                    <span class="exec-m-lbl">ORDERS AT RISK</span>
+                    <span class="exec-m-val mono-num amber-text" id="exec-orders-risk">07</span>
+                </div>
+                <div class="exec-m-divider"></div>
+                <div class="exec-m-item">
+                    <span class="exec-m-lbl">UNITS AT RISK</span>
+                    <span class="exec-m-val mono-num red-text" id="exec-units-risk">105</span>
+                </div>
+                <div class="exec-m-divider"></div>
+                <div class="exec-m-item">
+                    <span class="exec-m-lbl">VALUE AT RISK</span>
+                    <span class="exec-m-val mono-num green-text" id="exec-val-risk">$195K</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="content-wrapper">
+            
+            <!-- SECTION 1: CONTROL TOWER -->
+            <section id="tab-dashboard" class="tab-pane active">
+                <div class="pane-header">
+                    <h2><span class="cyber-prefix">01 //</span> CONTROL TOWER</h2>
+                    <p>Real-time command center for detecting, tracing, and resolving supply chain disruptions.</p>
+                </div>
+
+                <!-- CRITICAL SUPPLY DISRUPTION ALERT BANNER -->
+                <div id="critical-disruption-banner" class="critical-alert-banner">
+                    <div class="critical-header">
+                        <span class="critical-icon"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                        <span class="critical-title" id="crit-title">⚠ CRITICAL SUPPLY DISRUPTION</span>
+                        <span class="critical-badge" id="crit-badge">SEVERITY HIGH</span>
+                    </div>
+                    <div class="critical-body">
+                        <div class="critical-supplier-info">
+                            <h3 id="crit-supplier-name">ABC Components</h3>
+                            <p id="crit-product-name" class="mono-text">Motor Controller P101</p>
+                        </div>
+                        <div class="critical-stats-grid">
+                            <div class="crit-stat highlight-red">
+                                <span class="crit-num mono-num" id="crit-units-risk">105</span>
+                                <span class="crit-lbl">UNITS AT RISK</span>
+                            </div>
+                            <div class="crit-stat">
+                                <span class="crit-num mono-num" id="crit-orders-count">07</span>
+                                <span class="crit-lbl">CUSTOMER ORDERS</span>
+                            </div>
+                            <div class="crit-stat highlight-amber">
+                                <span class="crit-num mono-num" id="crit-high-priority">04</span>
+                                <span class="crit-lbl">HIGH PRIORITY</span>
+                            </div>
+                        </div>
+                        <div class="critical-actions">
+                            <button class="btn-crit-primary" onclick="switchTab('tab-impact')">
+                                <i class="fa-solid fa-diagram-project"></i> VIEW IMPACT MAP
+                            </button>
+                            <button class="btn-crit-secondary" onclick="switchTab('tab-decision')">
+                                <i class="fa-solid fa-brain"></i> DECISION ENGINE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Impact Summary Metric Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card cyan">
+                        <div class="metric-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-value mono-num" id="m-active-disruptions">1</span>
+                            <span class="metric-label">ACTIVE DISRUPTION</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card amber">
+                        <div class="metric-icon"><i class="fa-solid fa-cart-flatbed"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-value mono-num" id="m-affected-orders">7</span>
+                            <span class="metric-label">AFFECTED ORDERS</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card coral">
+                        <div class="metric-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-value mono-num" id="m-at-risk-stock">105 units</span>
+                            <span class="metric-label">UNIT SHORTAGE</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card purple">
+                        <div class="metric-icon"><i class="fa-solid fa-star-exclamation"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-value mono-num" id="m-high-priority">4</span>
+                            <span class="metric-label">HIGH-PRIORITY ORDERS</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card emerald">
+                        <div class="metric-icon"><i class="fa-solid fa-dollar-sign"></i></div>
+                        <div class="metric-data">
+                            <span class="metric-value mono-num" id="m-financial-exposure">$195,000</span>
+                            <span class="metric-label">VALUE AT RISK</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grounding Data Sources Browser -->
+                <div class="card data-browser-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-database"></i> Grounding Sources // Supply Chain Records</h3>
+                        <div class="dataset-pills">
+                            <button class="pill-btn active" data-db="suppliers">Suppliers (3)</button>
+                            <button class="pill-btn" data-db="products">Products (4)</button>
+                            <button class="pill-btn" data-db="inventory">Inventory (5)</button>
+                            <button class="pill-btn" data-db="shipments">Shipments (5)</button>
+                            <button class="pill-btn" data-db="orders">Customer Orders (9)</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table" id="db-table">
+                            <thead id="db-thead"></thead>
+                            <tbody id="db-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: DISRUPTION INTEL -->
+            <section id="tab-analyzer" class="tab-pane">
+                <div class="pane-header">
+                    <h2><span class="cyber-prefix">02 //</span> DISRUPTION INTEL</h2>
+                    <p>Futuristic AI scanner extracting entities from unstructured notices with confidence scores and verification.</p>
+                </div>
+
+                <!-- Demo Case Selector Buttons -->
+                <div class="demo-cases-banner">
+                    <span class="demo-label"><i class="fa-solid fa-flask"></i> SELECT DISRUPTION SCENARIO:</span>
+                    <button class="demo-btn case-normal" onclick="loadDemoCase('normal')">
+                        <i class="fa-solid fa-circle-check"></i> Case 1: Normal Disruption (ABC P101 Halt)
+                    </button>
+                    <button class="demo-btn case-difficult" onclick="loadDemoCase('difficult')">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Case 2: Ambiguous Notice (Human Escalation)
+                    </button>
+                    <button class="demo-btn case-noimpact" onclick="loadDemoCase('no_impact')">
+                        <i class="fa-solid fa-circle-minus"></i> Case 3: No Impact Disruption (P999)
+                    </button>
+                </div>
+
+                <div class="analyzer-grid">
+                    <!-- Text Area Input Card -->
+                    <div class="card input-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-terminal"></i> UNSTRUCTURED DISRUPTION NOTICE</h3>
+                            <button class="clear-btn" onclick="clearNoticeText()"><i class="fa-solid fa-eraser"></i> Clear</button>
+                        </div>
+                        <textarea id="notice-input" rows="7" placeholder="Paste supplier disruption email, news alert, or notice..."></textarea>
+                        
+                        <div class="api-key-row">
+                            <i class="fa-solid fa-key"></i>
+                            <input type="password" id="gemini-key-input" placeholder="Optional Gemini API Key (Uses default rule engine if blank)">
+                        </div>
+
+                        <button class="btn-primary analyze-btn" onclick="runAnalysis()">
+                            <i class="fa-solid fa-bolt"></i> ⚡ ANALYZE IMPACT
+                        </button>
+                    </div>
+
+                    <!-- AI Extraction Scanner Box -->
+                    <div class="card extraction-card cyber-scanner-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-microchip"></i> ◉ DISRUPTION INTEL // AI EXTRACTION</h3>
+                            <span class="badge badge-gemini" id="extraction-source">Gemini Scanner</span>
+                        </div>
+
+                        <div id="extraction-results" class="extraction-content">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Uncertainty Panel -->
+                <div class="card uncertainty-card" id="uncertainty-panel">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-shield-halved"></i> UNCERTAINTY & ESCALATION CONTROL</h3>
+                        <span class="badge" id="confidence-badge">Confidence: 92%</span>
+                    </div>
+                    <div class="uncertainty-grid" id="uncertainty-content">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: IMPACT MAP -->
+            <section id="tab-impact" class="tab-pane">
+                <div class="pane-header">
+                    <h2><span class="cyber-prefix">03 //</span> IMPACT MAP</h2>
+                    <p>6-layer end-to-end impact propagation graph demonstrating downstream disruption spread across supply chain nodes.</p>
+                </div>
+
+                <!-- Live Network Graph -->
+                <div class="card impact-network-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-network-wired"></i> END-TO-END IMPACT PROPAGATION GRAPH</h3>
+                        <span class="live-pulse-badge"><span class="pulse-dot"></span> LIVE NETWORK TRACE</span>
+                    </div>
+
+                    <div class="network-diagram-container" id="impact-network-diagram">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Affected Orders Table -->
+                <div class="card orders-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-list-check"></i> AFFECTED CUSTOMER ORDERS (RANKED BY RISK)</h3>
+                        <span class="evidence-hint"><i class="fa-solid fa-magnifying-glass"></i> Click "Why? / VIEW EVIDENCE" button on any order to inspect proof</span>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="data-table" id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Order ID</th>
+                                    <th>Customer Name</th>
+                                    <th>Product</th>
+                                    <th>Shortage / Required</th>
+                                    <th>Promised Date</th>
+                                    <th>Projected Delay</th>
+                                    <th>Priority</th>
+                                    <th>Risk Level</th>
+                                    <th>Evidence Trace ⭐</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-tbody">
+                                <tr>
+                                    <td colspan="10" style="text-align:center; padding:30px;" class="text-muted">
+                                        Run an analysis to view affected customer orders.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: DECISION ENGINE -->
+            <section id="tab-decision" class="tab-pane">
+                <div class="pane-header">
+                    <h2><span class="cyber-prefix">04 //</span> DECISION ENGINE</h2>
+                    <p>Grounded AI decision engine with interactive trade-off analysis and What-If scenario simulator.</p>
+                </div>
+
+                <!-- Cyber AI Decision Engine Card -->
+                <div class="cyber-decision-card" id="cyber-decision-box">
+                    <div class="cyber-decision-header">
+                        <span class="star-icon">★</span> AI DECISION ENGINE
+                    </div>
+                    
+                    <div class="cyber-decision-body">
+                        <div class="dec-status-label">RECOMMENDED STRATEGY</div>
+                        <h2 class="dec-action-title" id="rec-action-main">REALLOCATE WH02 STOCK + EXPEDITE SH101</h2>
+                        
+                        <div class="dec-metrics-row">
+                            <div class="dec-metric-box">
+                                <span class="dec-m-lbl">Match Confidence</span>
+                                <span class="dec-m-val cyan-text mono-num" id="dec-conf-val">91%</span>
+                            </div>
+                            <div class="dec-metric-box">
+                                <span class="dec-m-lbl">Customer Impact</span>
+                                <span class="dec-m-val green-text" id="dec-impact-val">LOW</span>
+                            </div>
+                            <div class="dec-metric-box">
+                                <span class="dec-m-lbl">Estimated Recovery</span>
+                                <span class="dec-m-val white-text mono-num" id="dec-recov-val">24h</span>
+                            </div>
+                        </div>
+
+                        <!-- EXPLICIT "WHY THIS PLAN WON" BOX -->
+                        <div class="why-plan-won-box">
+                            <h4 class="why-won-title"><i class="fa-solid fa-trophy text-safe"></i> WHY THIS PLAN WON</h4>
+                            <ul class="why-won-list" id="why-plan-won-list">
+                                <li><i class="fa-solid fa-check green-text"></i> <strong>20 units</strong> available at WH02</li>
+                                <li><i class="fa-solid fa-check green-text"></i> <strong>105 units</strong> total shortage</li>
+                                <li><i class="fa-solid fa-check green-text"></i> <strong>100 units</strong> in SH101</li>
+                                <li><i class="fa-solid fa-check green-text"></i> <strong>4 Tier-1 orders</strong> affected</li>
+                                <li><i class="fa-solid fa-check green-text"></i> <strong>Lowest customer impact</strong> among evaluated options</li>
+                                <li><i class="fa-solid fa-check green-text"></i> <strong>Estimated cost: $1,200</strong></li>
+                            </ul>
+                            <div class="math-explain-callout">
+                                <i class="fa-solid fa-calculator text-cyan"></i> <strong>COMPARISON MATH:</strong> (20 WH02 stock + 100 SH101 shipment) = 120 units total supply &ge; 105 units shortage &rarr; 0 Tier-1 delivery delays.
+                            </div>
+                        </div>
+
+                        <button class="btn-why-decision" onclick="toggleWhyDecision()" style="margin-top:16px;">
+                            <i class="fa-solid fa-circle-question"></i> [ INSPECT FULL TRADE-OFF & EVIDENCE ]
+                        </button>
+
+                        <!-- FULL ENHANCED WHY DRAWER -->
+                        <div class="why-decision-drawer" id="why-drawer" style="display:none;">
+                            <div class="why-drawer-grid">
+                                <div class="why-section">
+                                    <h4 class="why-sec-title"><i class="fa-solid fa-check-double text-safe"></i> RATIONALE & GROUNDING</h4>
+                                    <ul class="why-list" id="rec-why-list">
+                                        <!-- Populated dynamically -->
+                                    </ul>
+                                </div>
+
+                                <div class="why-section">
+                                    <h4 class="why-sec-title"><i class="fa-solid fa-scale-balanced text-cyan"></i> EVALUATED TRADE-OFF</h4>
+                                    <div class="tradeoff-kv-list">
+                                        <div class="tradeoff-item">
+                                            <span class="to-key">Cost:</span>
+                                            <span class="to-val mono-num">$1,200</span>
+                                        </div>
+                                        <div class="tradeoff-item">
+                                            <span class="to-key">Expected Recovery:</span>
+                                            <span class="to-val mono-num">24h</span>
+                                        </div>
+                                        <div class="tradeoff-item">
+                                            <span class="to-key">Customer Impact:</span>
+                                            <span class="to-val green-text">LOW</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hero-citations" style="margin-top:14px;">
+                                <span>Grounding Evidence:</span>
+                                <div id="rec-evidence-badges" class="badges-row">
+                                    <!-- Populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE WHAT-IF SIMULATION ENGINE -->
+                <div class="card whatif-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> SIMULATE RESPONSE // "WHAT-IF?" ENGINE</h3>
+                        <span class="badge badge-gemini">Scenario Simulator</span>
+                    </div>
+                    <p style="color:var(--text-muted); font-size:12px; margin-bottom:14px;">
+                        Test alternative operational strategies in real-time to compare recovery speeds, costs, and customer SLA impacts.
+                    </p>
+
+                    <div class="whatif-btn-row">
+                        <button class="whatif-btn" onclick="runWhatIfSimulation('EXPEDITE')">
+                            <i class="fa-solid fa-plane-fly"></i> [ EXPEDITE ]
+                        </button>
+                        <button class="whatif-btn active" onclick="runWhatIfSimulation('REALLOCATE')">
+                            <i class="fa-solid fa-boxes-packing"></i> [ REALLOCATE ]
+                        </button>
+                        <button class="whatif-btn" onclick="runWhatIfSimulation('PARTSHIP')">
+                            <i class="fa-solid fa-truck-split"></i> [ PART-SHIP ]
+                        </button>
+                        <button class="whatif-btn" onclick="runWhatIfSimulation('INFORM')">
+                            <i class="fa-solid fa-bullhorn"></i> [ INFORM CUSTOMER ]
+                        </button>
+                    </div>
+
+                    <!-- SIMULATION RESULT BOX -->
+                    <div class="sim-result-box" id="sim-result-box">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- Human Authorization & Action Panel -->
+                <div class="card human-decision-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-user-check"></i> HUMAN DECISION & AUTHORIZATION</h3>
+                        <span class="human-status-tag"><i class="fa-solid fa-hand"></i> AI Recommends — Human Executes</span>
+                    </div>
+                    <p style="margin-bottom:16px; color:var(--text-muted);">
+                        In accordance with PS08 safety guidelines, NexChain AI does not execute autonomous operations. Please confirm your decision:
+                    </p>
+                    <div class="human-btn-group">
+                        <button class="btn-human-accept" onclick="handleHumanDecision('accept')">
+                            <i class="fa-solid fa-circle-check"></i> ACCEPT RECOMMENDATION
+                        </button>
+                        <button class="btn-human-review" onclick="handleHumanDecision('review')">
+                            <i class="fa-solid fa-sliders"></i> REVIEW ALTERNATIVES
+                        </button>
+                    </div>
+                    <div id="human-feedback-banner" class="human-feedback-banner"></div>
+                </div>
+
+                <!-- Options Tradeoff Comparison Table -->
+                <div class="card options-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-table-columns"></i> MITIGATION OPTIONS MATRIX</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table options-table">
+                            <thead>
+                                <tr>
+                                    <th>Option</th>
+                                    <th>Cost</th>
+                                    <th>Delivery Impact</th>
+                                    <th>Customer Impact</th>
+                                    <th>Stock Impact</th>
+                                    <th>Status / Strategy</th>
+                                </tr>
+                            </thead>
+                            <tbody id="options-matrix-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="recommended-summary-footer" id="rec-summary-footer">
+                        <strong>⭐ Recommended:</strong> Reallocate WH02 stock + Expedite SH101 — <em>Reason: Lowest customer impact while protecting high-priority orders.</em>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: EVIDENCE TRAIL -->
+            <section id="tab-trail" class="tab-pane">
+                <div class="pane-header">
+                    <h2><span class="cyber-prefix">05 //</span> EVIDENCE TRAIL</h2>
+                    <p>Transparent audit trace detailing AI entity extraction, database lookups, and deterministic Python stock math.</p>
+                </div>
+
+                <div class="card trail-card">
+                    <div class="card-header">
+                        <h3><i class="fa-solid fa-route"></i> ANALYSIS TRACE // SYSTEM ARCHITECTURE TIMELINE</h3>
+                        <span class="badge badge-gemini"><i class="fa-solid fa-shield-check"></i> 100% AUDITABLE & GROUNDED</span>
+                    </div>
+
+                    <div class="analysis-trace-container" id="analysis-trace-timeline">
+                        <!-- Dynamically populated timeline -->
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- EVIDENCE MODAL POPUP -->
+    <div class="modal-backdrop" id="evidence-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="badge badge-verified"><i class="fa-solid fa-shield-check"></i> VERIFIED GROUND TRUTH DATA</span>
+                    <h3 id="modal-title">Evidence Inspector</h3>
+                </div>
+                <button class="modal-close" onclick="closeEvidenceModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="source-file-tag">
+                    <i class="fa-solid fa-file-csv"></i> Source Grounding Record: <code id="modal-source-file" class="mono-text">data/orders.csv</code>
+                </div>
+
+                <div class="modal-trace-container" id="modal-trace-container">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <div class="evidence-kv-grid" id="modal-kv-grid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p class="modal-footnote"><i class="fa-solid fa-circle-info"></i> Direct filesystem record match — 0% LLM math hallucination.</p>
+                <button class="btn-secondary" onclick="closeEvidenceModal()">Close Inspector</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

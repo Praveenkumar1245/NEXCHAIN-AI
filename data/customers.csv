@@ -1,0 +1,10 @@
+customer_id,name,tier,segment
+C001,Apex Robotics,Tier 1,Automotive
+C002,Siemens Industrial,Tier 1,Manufacturing
+C003,Bosch Automation,Tier 1,Automotive
+C004,Schneider Electric,Tier 2,Energy
+C005,ABB Heavy Tech,Tier 1,Heavy Equipment
+C006,GE Healthcare,Tier 1,Medical Devices
+C007,Rockwell Automation,Tier 2,Industrial AI
+C008,Honeywell Systems,Tier 3,Building Automation
+C009,Yokogawa India,Tier 2,Process Control
