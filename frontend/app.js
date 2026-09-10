@@ -990,11 +990,35 @@ function closeEvidenceModal() {
 
 // 17. CSV Upload Manager
 let selectedCsvFile = null;
+let currentUploadMode = 'file';
+
+function switchUploadMode(mode) {
+    currentUploadMode = mode;
+    const fileContainer = document.getElementById("upload-file-mode-container");
+    const textContainer = document.getElementById("upload-text-mode-container");
+    const btnFile = document.getElementById("btn-tab-file-mode");
+    const btnText = document.getElementById("btn-tab-text-mode");
+
+    if (mode === 'file') {
+        fileContainer.style.display = "block";
+        textContainer.style.display = "none";
+        btnFile.classList.add("active");
+        btnText.classList.remove("active");
+    } else {
+        fileContainer.style.display = "none";
+        textContainer.style.display = "block";
+        btnText.classList.add("active");
+        btnFile.classList.remove("active");
+    }
+}
 
 function openCsvUploadModal() {
     selectedCsvFile = null;
+    currentUploadMode = 'file';
+    switchUploadMode('file');
     document.getElementById("upload-csv-file-input").value = "";
     document.getElementById("upload-file-name").innerText = "";
+    document.getElementById("upload-csv-raw-textarea").value = "";
     const statusMsg = document.getElementById("upload-status-msg");
     statusMsg.style.display = "none";
     statusMsg.innerText = "";
@@ -1005,75 +1029,113 @@ function closeCsvUploadModal() {
     document.getElementById("csv-upload-modal").classList.remove("active");
 }
 
+function onCsvDragOver(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.currentTarget.style.background = "rgba(0,210,255,0.12)";
+}
+
+function onCsvDragLeave(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.currentTarget.style.background = "rgba(0,210,255,0.03)";
+}
+
+function onCsvDrop(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.currentTarget.style.background = "rgba(0,210,255,0.03)";
+    const files = event.dataTransfer.files;
+    if (files && files.length > 0) {
+        processSelectedFile(files[0]);
+    }
+}
+
 function onCsvFileSelected(event) {
     const files = event.target.files;
     if (files && files.length > 0) {
-        selectedCsvFile = files[0];
-        document.getElementById("upload-file-name").innerText = `📄 ${selectedCsvFile.name} (${(selectedCsvFile.size / 1024).toFixed(1)} KB)`;
-        
-        // Auto-detect target dataset from filename if matching
-        const fname = selectedCsvFile.name.toLowerCase();
-        const validTables = ["suppliers", "products", "inventory", "shipments", "orders", "customers"];
-        for (const vt of validTables) {
-            if (fname.includes(vt)) {
-                document.getElementById("upload-target-table").value = vt;
-                break;
-            }
+        processSelectedFile(files[0]);
+    }
+}
+
+function processSelectedFile(file) {
+    selectedCsvFile = file;
+    document.getElementById("upload-file-name").innerText = `📄 ${selectedCsvFile.name} (${(selectedCsvFile.size / 1024).toFixed(1)} KB)`;
+    
+    // Auto-detect target dataset from filename if matching
+    const fname = selectedCsvFile.name.toLowerCase();
+    const validTables = ["suppliers", "products", "inventory", "shipments", "orders", "customers"];
+    for (const vt of validTables) {
+        if (fname.includes(vt)) {
+            document.getElementById("upload-target-table").value = vt;
+            break;
         }
     }
+}
+
+async function sendCsvPayload(targetTable, csvContent) {
+    const statusMsg = document.getElementById("upload-status-msg");
+    const response = await fetch(`${API_BASE}/api/data/upload-csv`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            table_name: targetTable,
+            csv_content: csvContent
+        })
+    });
+
+    const resData = await response.json();
+    if (!response.ok) throw new Error(resData.detail || "Upload failed");
+
+    statusMsg.style.display = "block";
+    statusMsg.style.background = "rgba(0,255,100,0.1)";
+    statusMsg.style.border = "1px solid var(--emerald)";
+    statusMsg.style.color = "var(--emerald)";
+    statusMsg.innerText = `✓ ${resData.message}`;
+
+    await loadDatabaseSummary();
+
+    setTimeout(() => {
+        closeCsvUploadModal();
+    }, 1500);
 }
 
 async function submitCsvUpload() {
     const statusMsg = document.getElementById("upload-status-msg");
     statusMsg.style.display = "none";
+    const targetTable = document.getElementById("upload-target-table").value;
 
-    if (!selectedCsvFile) {
+    try {
+        if (currentUploadMode === 'text') {
+            const rawText = document.getElementById("upload-csv-raw-textarea").value.trim();
+            if (!rawText) {
+                throw new Error("Please paste CSV rows into the text box first!");
+            }
+            await sendCsvPayload(targetTable, rawText);
+        } else {
+            if (!selectedCsvFile) {
+                throw new Error("Please select or drop a CSV file first!");
+            }
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    await sendCsvPayload(targetTable, e.target.result);
+                } catch (err) {
+                    statusMsg.style.display = "block";
+                    statusMsg.style.background = "rgba(255,0,0,0.1)";
+                    statusMsg.style.border = "1px solid red";
+                    statusMsg.style.color = "#ff6b6b";
+                    statusMsg.innerText = `Error: ${err.message}`;
+                }
+            };
+            reader.readAsText(selectedCsvFile);
+        }
+    } catch (err) {
+        console.error("CSV Upload error:", err);
         statusMsg.style.display = "block";
         statusMsg.style.background = "rgba(255,0,0,0.1)";
         statusMsg.style.border = "1px solid red";
         statusMsg.style.color = "#ff6b6b";
-        statusMsg.innerText = "Please select a CSV file first!";
-        return;
+        statusMsg.innerText = `Error: ${err.message}`;
     }
-
-    const targetTable = document.getElementById("upload-target-table").value;
-
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-        const csvContent = e.target.result;
-        try {
-            const response = await fetch(`${API_BASE}/api/data/upload-csv`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    table_name: targetTable,
-                    csv_content: csvContent
-                })
-            });
-
-            const resData = await response.json();
-            if (!response.ok) throw new Error(resData.detail || "Upload failed");
-
-            statusMsg.style.display = "block";
-            statusMsg.style.background = "rgba(0,255,100,0.1)";
-            statusMsg.style.border = "1px solid var(--emerald)";
-            statusMsg.style.color = "var(--emerald)";
-            statusMsg.innerText = `✓ ${resData.message}`;
-
-            await loadDatabaseSummary();
-
-            setTimeout(() => {
-                closeCsvUploadModal();
-            }, 1500);
-
-        } catch (err) {
-            console.error("CSV Upload error:", err);
-            statusMsg.style.display = "block";
-            statusMsg.style.background = "rgba(255,0,0,0.1)";
-            statusMsg.style.border = "1px solid red";
-            statusMsg.style.color = "#ff6b6b";
-            statusMsg.innerText = `Error: ${err.message}`;
-        }
-    };
-    reader.readAsText(selectedCsvFile);
 }

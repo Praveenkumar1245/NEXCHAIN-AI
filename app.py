@@ -182,11 +182,15 @@ async def upload_csv_data(payload: CSVUploadRequest):
     table_clean = payload.table_name.lower().strip()
     valid_tables = ["suppliers", "products", "inventory", "shipments", "orders", "customers"]
     if table_clean not in valid_tables:
-        raise HTTPException(status_code=400, detail=f"Invalid table name. Choose from: {', '.join(valid_tables)}")
+        raise HTTPException(status_code=400, detail=f"Invalid dataset table name: '{table_clean}'. Valid choices: {', '.join(valid_tables)}")
+    
+    content = payload.csv_content.strip()
+    if not content:
+        raise HTTPException(status_code=400, detail="CSV content cannot be empty.")
     
     save_path = os.path.join(db.data_dir, f"{table_clean}.csv")
     with open(save_path, "w", encoding="utf-8") as f:
-        f.write(payload.csv_content.strip())
+        f.write(content + "\n")
     
     db.reload()
     return {

@@ -551,7 +551,7 @@
 
     <!-- CSV UPLOAD MODAL POPUP -->
     <div class="modal-backdrop" id="csv-upload-modal">
-        <div class="modal-card">
+        <div class="modal-card" style="max-width:550px;">
             <div class="modal-header">
                 <div class="modal-title-wrap">
                     <span class="badge badge-verified"><i class="fa-solid fa-file-csv"></i> CUSTOM DATA IMPORT</span>
@@ -561,8 +561,8 @@
             </div>
             <div class="modal-body">
                 <div style="margin-bottom:16px;">
-                    <label style="display:block; font-size:13px; margin-bottom:6px; color:var(--text-muted);">Target Dataset Table:</label>
-                    <select id="upload-target-table" style="width:100%; padding:8px; background:rgba(0,0,0,0.4); border:1px solid var(--border-color); border-radius:6px; color:var(--text-bright);">
+                    <label style="display:block; font-size:13px; margin-bottom:6px; color:var(--text-muted); font-weight:600;">1. Target Dataset Table:</label>
+                    <select id="upload-target-table" style="width:100%; padding:10px; background:rgba(0,0,0,0.5); border:1px solid var(--cyan); border-radius:6px; color:var(--text-bright); font-size:14px;">
                         <option value="suppliers">Suppliers (suppliers.csv)</option>
                         <option value="products">Products (products.csv)</option>
                         <option value="inventory">Inventory (inventory.csv)</option>
@@ -572,14 +572,30 @@
                     </select>
                 </div>
 
-                <div style="margin-bottom:16px; border:2px dashed var(--cyan); border-radius:8px; padding:24px; text-align:center; background:rgba(0,210,255,0.03);">
-                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:32px; color:var(--cyan); margin-bottom:10px;"></i>
-                    <p style="margin-bottom:12px; font-size:14px; color:var(--text-bright);">Select a CSV file from your computer</p>
-                    <input type="file" id="upload-csv-file-input" accept=".csv" style="display:none;" onchange="onCsvFileSelected(event)">
-                    <button class="btn-secondary" onclick="document.getElementById('upload-csv-file-input').click()">
-                        <i class="fa-solid fa-folder-open"></i> Choose CSV File...
+                <div style="margin-bottom:12px; display:flex; gap:8px;">
+                    <button class="btn-secondary active" id="btn-tab-file-mode" onclick="switchUploadMode('file')" style="flex:1; padding:6px; font-size:12px;">
+                        <i class="fa-solid fa-folder-open"></i> Upload File / Drag & Drop
                     </button>
-                    <p id="upload-file-name" style="margin-top:10px; font-size:12px; color:var(--cyan); font-family:var(--font-mono);"></p>
+                    <button class="btn-secondary" id="btn-tab-text-mode" onclick="switchUploadMode('text')" style="flex:1; padding:6px; font-size:12px;">
+                        <i class="fa-solid fa-paste"></i> Paste CSV Raw Text
+                    </button>
+                </div>
+
+                <!-- Mode 1: File Dropzone -->
+                <div id="upload-file-mode-container" style="margin-bottom:16px; border:2px dashed var(--cyan); border-radius:8px; padding:24px; text-align:center; background:rgba(0,210,255,0.03);" ondragover="onCsvDragOver(event)" ondragleave="onCsvDragLeave(event)" ondrop="onCsvDrop(event)">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:36px; color:var(--cyan); margin-bottom:10px;"></i>
+                    <p style="margin-bottom:12px; font-size:14px; color:var(--text-bright);">Drag & Drop your CSV file here, or click to browse</p>
+                    <input type="file" id="upload-csv-file-input" accept=".csv,.txt,text/csv" style="display:none;" onchange="onCsvFileSelected(event)">
+                    <button class="btn-secondary" onclick="document.getElementById('upload-csv-file-input').click()">
+                        <i class="fa-solid fa-file-csv"></i> Select CSV File...
+                    </button>
+                    <p id="upload-file-name" style="margin-top:12px; font-size:13px; color:var(--cyan); font-family:var(--font-mono); font-weight:600;"></p>
+                </div>
+
+                <!-- Mode 2: Raw Textarea -->
+                <div id="upload-text-mode-container" style="display:none; margin-bottom:16px;">
+                    <label style="display:block; font-size:12px; margin-bottom:4px; color:var(--text-muted);">Paste raw CSV rows (including header row):</label>
+                    <textarea id="upload-csv-raw-textarea" rows="7" style="width:100%; padding:10px; background:rgba(0,0,0,0.5); border:1px solid var(--border-color); border-radius:6px; color:var(--cyan); font-family:var(--font-mono); font-size:12px;" placeholder="supplier_id,name,location,contact_email,reliability_score&#10;S001,ABC Components,Chennai,ops@abccomponents.in,0.92"></textarea>
                 </div>
 
                 <div id="upload-status-msg" style="display:none; padding:10px; border-radius:6px; font-size:13px; margin-top:10px;"></div>
