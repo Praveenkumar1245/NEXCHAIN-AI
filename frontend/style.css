@@ -575,5 +575,10 @@ textarea#notice-input:focus { outline: none; border-color: var(--cyan); }
 .kv-val { font-family: var(--font-code); font-size: 13px; color: var(--text-main); font-weight: 600; }
 .modal-footer { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--card-border); padding-top: 12px; }
 .modal-footnote { font-size: 11px; color: var(--text-dim); }
-.btn-secondary { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); color: var(--text-main); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: var(--font-heading); font-size: 12px; }
+.btn-secondary { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); color: var(--text-main); padding: 6px 14px; border-radius: 6px; cursor: pointer; font-family: var(--font-heading); font-size: 12px; transition: all 0.2s ease; }
 .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+.btn-secondary.active { background: rgba(0, 240, 255, 0.15); border-color: var(--cyan); color: var(--cyan); font-weight: 700; }
+
+.btn-primary { background: linear-gradient(135deg, #00F0FF 0%, #00B4D8 100%); color: #060913; border: none; padding: 8px 18px; border-radius: 6px; font-family: var(--font-heading); font-weight: 700; font-size: 13px; cursor: pointer; box-shadow: 0 0 12px var(--cyan-glow); transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary:hover { background: #00F0FF; box-shadow: 0 0 18px rgba(0, 240, 255, 0.4); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }

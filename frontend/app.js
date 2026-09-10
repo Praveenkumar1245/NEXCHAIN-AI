@@ -1103,39 +1103,56 @@ async function sendCsvPayload(targetTable, csvContent) {
 async function submitCsvUpload() {
     const statusMsg = document.getElementById("upload-status-msg");
     statusMsg.style.display = "none";
+    statusMsg.innerText = "";
     const targetTable = document.getElementById("upload-target-table").value;
 
     try {
+        let csvText = "";
+
         if (currentUploadMode === 'text') {
-            const rawText = document.getElementById("upload-csv-raw-textarea").value.trim();
-            if (!rawText) {
+            csvText = document.getElementById("upload-csv-raw-textarea").value.trim();
+            if (!csvText) {
                 throw new Error("Please paste CSV rows into the text box first!");
             }
-            await sendCsvPayload(targetTable, rawText);
         } else {
-            if (!selectedCsvFile) {
+            // Check if file is available in selectedCsvFile OR fileInput element
+            const fileInput = document.getElementById("upload-csv-file-input");
+            let fileToRead = selectedCsvFile;
+            if (!fileToRead && fileInput && fileInput.files && fileInput.files.length > 0) {
+                fileToRead = fileInput.files[0];
+            }
+
+            if (!fileToRead) {
                 throw new Error("Please select or drop a CSV file first!");
             }
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    await sendCsvPayload(targetTable, e.target.result);
-                } catch (err) {
-                    statusMsg.style.display = "block";
-                    statusMsg.style.background = "rgba(255,0,0,0.1)";
-                    statusMsg.style.border = "1px solid red";
-                    statusMsg.style.color = "#ff6b6b";
-                    statusMsg.innerText = `Error: ${err.message}`;
-                }
-            };
-            reader.readAsText(selectedCsvFile);
+
+            csvText = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.onerror = () => reject(new Error("Failed to read selected CSV file"));
+                reader.readAsText(fileToRead);
+            });
         }
+
+        if (!csvText || !csvText.trim()) {
+            throw new Error("CSV content is empty!");
+        }
+
+        // Show uploading progress
+        statusMsg.style.display = "block";
+        statusMsg.style.background = "rgba(0, 240, 255, 0.1)";
+        statusMsg.style.border = "1px solid var(--cyan)";
+        statusMsg.style.color = "var(--cyan)";
+        statusMsg.innerText = "⏳ Uploading and applying dataset...";
+
+        await sendCsvPayload(targetTable, csvText.trim());
+
     } catch (err) {
         console.error("CSV Upload error:", err);
         statusMsg.style.display = "block";
-        statusMsg.style.background = "rgba(255,0,0,0.1)";
+        statusMsg.style.background = "rgba(255,0,0,0.15)";
         statusMsg.style.border = "1px solid red";
         statusMsg.style.color = "#ff6b6b";
-        statusMsg.innerText = `Error: ${err.message}`;
+        statusMsg.innerText = `⚠ ${err.message}`;
     }
 }
