@@ -190,6 +190,9 @@
                             <button class="btn-secondary" onclick="reloadDatasetFromDisk()" style="padding:6px 12px; font-size:12px; cursor:pointer;" title="Re-read CSV files from disk">
                                 <i class="fa-solid fa-arrows-rotate"></i> Reload CSV Data
                             </button>
+                            <button class="btn-primary" onclick="openCsvUploadModal()" style="padding:6px 12px; font-size:12px; cursor:pointer;" title="Upload custom CSV dataset">
+                                <i class="fa-solid fa-file-arrow-up"></i> Upload CSV Dataset
+                            </button>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -538,6 +541,48 @@
             <div class="modal-footer">
                 <p class="modal-footnote"><i class="fa-solid fa-circle-info"></i> Direct filesystem record match — 0% LLM math hallucination.</p>
                 <button class="btn-secondary" onclick="closeEvidenceModal()">Close Inspector</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSV UPLOAD MODAL POPUP -->
+    <div class="modal-backdrop" id="csv-upload-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="badge badge-verified"><i class="fa-solid fa-file-csv"></i> CUSTOM DATA IMPORT</span>
+                    <h3>Upload CSV Dataset</h3>
+                </div>
+                <button class="modal-close" onclick="closeCsvUploadModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom:16px;">
+                    <label style="display:block; font-size:13px; margin-bottom:6px; color:var(--text-muted);">Target Dataset Table:</label>
+                    <select id="upload-target-table" style="width:100%; padding:8px; background:rgba(0,0,0,0.4); border:1px solid var(--border-color); border-radius:6px; color:var(--text-bright);">
+                        <option value="suppliers">Suppliers (suppliers.csv)</option>
+                        <option value="products">Products (products.csv)</option>
+                        <option value="inventory">Inventory (inventory.csv)</option>
+                        <option value="shipments">Shipments (shipments.csv)</option>
+                        <option value="orders">Customer Orders (orders.csv)</option>
+                        <option value="customers">Customers (customers.csv)</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom:16px; border:2px dashed var(--cyan); border-radius:8px; padding:24px; text-align:center; background:rgba(0,210,255,0.03);">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size:32px; color:var(--cyan); margin-bottom:10px;"></i>
+                    <p style="margin-bottom:12px; font-size:14px; color:var(--text-bright);">Select a CSV file from your computer</p>
+                    <input type="file" id="upload-csv-file-input" accept=".csv" style="display:none;" onchange="onCsvFileSelected(event)">
+                    <button class="btn-secondary" onclick="document.getElementById('upload-csv-file-input').click()">
+                        <i class="fa-solid fa-folder-open"></i> Choose CSV File...
+                    </button>
+                    <p id="upload-file-name" style="margin-top:10px; font-size:12px; color:var(--cyan); font-family:var(--font-mono);"></p>
+                </div>
+
+                <div id="upload-status-msg" style="display:none; padding:10px; border-radius:6px; font-size:13px; margin-top:10px;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeCsvUploadModal()">Cancel</button>
+                <button class="btn-primary" onclick="submitCsvUpload()"><i class="fa-solid fa-upload"></i> Upload & Apply Dataset</button>
             </div>
         </div>
     </div>
