@@ -812,12 +812,47 @@ async function loadDatabaseSummary() {
         const response = await fetch(`${API_BASE}/api/data/summary`);
         if (!response.ok) return;
         currentDbData = await response.json();
+        updatePillBadgeCounts();
         const activePill = document.querySelector(".pill-btn.active");
         const activeTab = activePill ? activePill.getAttribute("data-db") : "suppliers";
         renderDbTable(activeTab);
     } catch (err) {
         console.error("DB Load Error:", err);
     }
+}
+
+function updatePillBadgeCounts() {
+    if (!currentDbData) return;
+    const map = {
+        suppliers: "Suppliers",
+        products: "Products",
+        inventory: "Inventory",
+        shipments: "Shipments",
+        orders: "Customer Orders",
+        customers: "Customers"
+    };
+    for (const [key, label] of Object.entries(map)) {
+        const btn = document.querySelector(`.pill-btn[data-db="${key}"]`);
+        if (btn && currentDbData[key]) {
+            btn.innerText = `${label} (${currentDbData[key].length})`;
+        }
+    }
+}
+
+async function selectDbTab(dbKey, element) {
+    const pills = document.querySelectorAll(".pill-btn");
+    pills.forEach(x => x.classList.remove("active"));
+    if (element) {
+        element.classList.add("active");
+    } else {
+        const target = document.querySelector(`.pill-btn[data-db="${dbKey}"]`);
+        if (target) target.classList.add("active");
+    }
+
+    if (!currentDbData) {
+        await loadDatabaseSummary();
+    }
+    renderDbTable(dbKey);
 }
 
 async function reloadDatasetFromDisk() {
@@ -848,10 +883,8 @@ function initDbBrowser() {
     const pills = document.querySelectorAll(".pill-btn");
     pills.forEach(p => {
         p.addEventListener("click", () => {
-            pills.forEach(x => x.classList.remove("active"));
-            p.classList.add("active");
             const dbKey = p.getAttribute("data-db");
-            renderDbTable(dbKey);
+            selectDbTab(dbKey, p);
         });
     });
 }

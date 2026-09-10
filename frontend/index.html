@@ -181,11 +181,12 @@
                         <h3><i class="fa-solid fa-database"></i> Grounding Sources // Supply Chain Records</h3>
                         <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                             <div class="dataset-pills">
-                                <button class="pill-btn active" data-db="suppliers">Suppliers</button>
-                                <button class="pill-btn" data-db="products">Products</button>
-                                <button class="pill-btn" data-db="inventory">Inventory</button>
-                                <button class="pill-btn" data-db="shipments">Shipments</button>
-                                <button class="pill-btn" data-db="orders">Customer Orders</button>
+                                <button class="pill-btn active" data-db="suppliers" onclick="selectDbTab('suppliers', this)">Suppliers</button>
+                                <button class="pill-btn" data-db="products" onclick="selectDbTab('products', this)">Products</button>
+                                <button class="pill-btn" data-db="inventory" onclick="selectDbTab('inventory', this)">Inventory</button>
+                                <button class="pill-btn" data-db="shipments" onclick="selectDbTab('shipments', this)">Shipments</button>
+                                <button class="pill-btn" data-db="orders" onclick="selectDbTab('orders', this)">Customer Orders</button>
+                                <button class="pill-btn" data-db="customers" onclick="selectDbTab('customers', this)">Customers</button>
                             </div>
                             <button class="btn-secondary" onclick="reloadDatasetFromDisk()" style="padding:6px 12px; font-size:12px; cursor:pointer;" title="Re-read CSV files from disk">
                                 <i class="fa-solid fa-arrows-rotate"></i> Reload CSV Data
