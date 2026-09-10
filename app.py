@@ -73,6 +73,9 @@ async def analyze_disruption(payload: DisruptionAnalysisRequest):
     if not text:
         raise HTTPException(status_code=400, detail="Disruption notice text cannot be empty.")
 
+    # Always reload fresh CSV data from disk
+    db.reload()
+
     # 1. Gemini Extraction (or Fallback Engine)
     if payload.api_key:
         from src.gemini_client import GeminiClient
@@ -138,10 +141,12 @@ async def analyze_disruption(payload: DisruptionAnalysisRequest):
 
 @app.get("/api/evidence/{evidence_key}")
 async def get_evidence(evidence_key: str):
+    db.reload()
     return evidence_engine.get_evidence_detail(evidence_key)
 
 @app.get("/api/data/summary")
 async def get_data_summary():
+    db.reload()
     return {
         "summary": db.get_all_summary(),
         "suppliers": db.suppliers.to_dict('records'),
@@ -151,6 +156,22 @@ async def get_data_summary():
         "orders": db.orders.to_dict('records'),
         "customers": db.customers.to_dict('records')
     }
+
+class DatasetUpdateRequest(BaseModel):
+    table_name: str
+    records: List[Dict[str, Any]]
+
+@app.post("/api/data/reload")
+async def reload_dataset():
+    db.reload()
+    return {"status": "success", "message": "Database reloaded from CSV files", "summary": db.get_all_summary()}
+
+@app.post("/api/data/update")
+async def update_dataset(payload: DatasetUpdateRequest):
+    success = db.save_dataset(payload.table_name, payload.records)
+    if not success:
+        raise HTTPException(status_code=400, detail=f"Invalid dataset table name: {payload.table_name}")
+    return {"status": "success", "message": f"Dataset '{payload.table_name}' updated successfully", "summary": db.get_all_summary()}
 
 if __name__ == "__main__":
     print("==========================================================")

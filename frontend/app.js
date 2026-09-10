@@ -812,9 +812,22 @@ async function loadDatabaseSummary() {
         const response = await fetch(`${API_BASE}/api/data/summary`);
         if (!response.ok) return;
         currentDbData = await response.json();
-        renderDbTable("suppliers");
+        const activePill = document.querySelector(".pill-btn.active");
+        const activeTab = activePill ? activePill.getAttribute("data-db") : "suppliers";
+        renderDbTable(activeTab);
     } catch (err) {
         console.error("DB Load Error:", err);
+    }
+}
+
+async function reloadDatasetFromDisk() {
+    try {
+        const response = await fetch(`${API_BASE}/api/data/reload`, { method: "POST" });
+        if (response.ok) {
+            await loadDatabaseSummary();
+        }
+    } catch (err) {
+        console.error("Reload error:", err);
     }
 }
 

@@ -76,6 +76,7 @@ class DataLoader:
         return res.iloc[0].to_dict() if not res.empty else None
 
     def get_all_summary(self) -> Dict[str, Any]:
+        self.reload()
         return {
             "suppliers_count": len(self.suppliers),
             "products_count": len(self.products),
@@ -84,5 +85,15 @@ class DataLoader:
             "orders_count": len(self.orders),
             "total_order_value": int(self.orders['total_value'].sum())
         }
+
+    def save_dataset(self, table_name: str, records: List[Dict[str, Any]]) -> bool:
+        valid_tables = ["suppliers", "products", "inventory", "shipments", "orders", "customers"]
+        table_clean = table_name.lower().strip()
+        if table_clean not in valid_tables:
+            return False
+        df = pd.DataFrame(records)
+        df.to_csv(os.path.join(self.data_dir, f"{table_clean}.csv"), index=False)
+        self.reload()
+        return True
 
 db = DataLoader()
