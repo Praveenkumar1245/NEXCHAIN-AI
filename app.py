@@ -195,6 +195,17 @@ async def upload_csv_data(payload: CSVUploadRequest):
         "summary": db.get_all_summary()
     }
 
+@app.post("/api/data/reset-demo")
+async def reset_demo_data():
+    success = db.reset_to_demo_defaults()
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to restore default demo dataset.")
+    return {
+        "status": "success",
+        "message": "Original default demo CSV datasets restored successfully!",
+        "summary": db.get_all_summary()
+    }
+
 if __name__ == "__main__":
     print("==========================================================")
     print("[NEXCHAIN // CONTROL TOWER] Supply Chain Control Tower starting...")

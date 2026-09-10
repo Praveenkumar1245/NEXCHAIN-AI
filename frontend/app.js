@@ -831,6 +831,19 @@ async function reloadDatasetFromDisk() {
     }
 }
 
+async function resetToDemoData() {
+    if (!confirm("Are you sure you want to restore the original default demo datasets?")) return;
+    try {
+        const response = await fetch(`${API_BASE}/api/data/reset-demo`, { method: "POST" });
+        if (response.ok) {
+            await loadDatabaseSummary();
+            alert("✓ Original default demo CSV datasets restored successfully!");
+        }
+    } catch (err) {
+        console.error("Reset error:", err);
+    }
+}
+
 function initDbBrowser() {
     const pills = document.querySelectorAll(".pill-btn");
     pills.forEach(p => {

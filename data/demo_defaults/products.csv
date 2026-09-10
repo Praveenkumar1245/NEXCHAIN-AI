@@ -1,0 +1,5 @@
+product_id,name,category,supplier_id,unit_price
+P101,Motor Controller,Electronics,S001,150
+P102,Power Module,Power Systems,S001,210
+P103,Display Unit,Human Interface,S002,320
+P104,Micro-Sensor Array,Sensors,S003,95

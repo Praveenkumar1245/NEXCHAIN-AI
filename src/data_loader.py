@@ -96,4 +96,17 @@ class DataLoader:
         self.reload()
         return True
 
+    def reset_to_demo_defaults(self) -> bool:
+        backup_dir = os.path.join(self.data_dir, "demo_defaults")
+        if not os.path.exists(backup_dir):
+            return False
+        import shutil
+        for fname in os.listdir(backup_dir):
+            if fname.endswith(".csv"):
+                src = os.path.join(backup_dir, fname)
+                dst = os.path.join(self.data_dir, fname)
+                shutil.copy2(src, dst)
+        self.reload()
+        return True
+
 db = DataLoader()

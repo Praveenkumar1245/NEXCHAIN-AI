@@ -1,0 +1,6 @@
+warehouse_id,product_id,quantity,allocated_quantity,safety_stock,location_name
+WH01,P101,35,15,10,Chennai Central Hub
+WH01,P102,80,20,15,Chennai Central Hub
+WH02,P101,20,15,10,Bengaluru Logistics Park
+WH02,P103,60,25,20,Bengaluru Logistics Park
+WH03,P104,110,40,25,Mumbai West Fulfillment

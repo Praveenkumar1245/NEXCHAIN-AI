@@ -1,0 +1,4 @@
+supplier_id,name,location,contact_email,reliability_score
+S001,ABC Components,Chennai,ops@abccomponents.in,0.92
+S002,Prime Electronics,Bangalore,support@primeelec.com,0.95
+S003,Global Parts,Mumbai,logistics@globalparts.com,0.88
