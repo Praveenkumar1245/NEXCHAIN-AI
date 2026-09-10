@@ -14,23 +14,37 @@ from src.ranking import order_ranker
 from src.recommender import recommender
 from src.evidence import evidence_engine
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(
     title="NexChain AI - Supply Chain Response Copilot",
     description="PS08 Disruption Response Engine: LLM Entity Extraction + Deterministic Impact Calculations + Traceable Evidence Matrix",
     version="1.0.0"
 )
 
+# Enable CORS for live server / cross-origin frontend requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Mount static frontend files
 FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "frontend")
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
-class DisruptionAnalysisRequest(BaseModel):
-    text: str
-    api_key: Optional[str] = None
-
 @app.get("/")
 async def serve_index():
     return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+
+@app.get("/{filename}")
+async def serve_static_file(filename: str):
+    file_path = os.path.join(FRONTEND_DIR, filename)
+    if os.path.exists(file_path) and os.path.isfile(file_path):
+        return FileResponse(file_path)
+    raise HTTPException(status_code=404, detail="File not found")
 
 @app.get("/api/cases/{case_type}")
 async def get_demo_case(case_type: str):
@@ -48,6 +62,10 @@ async def get_demo_case(case_type: str):
         with open(file_path, "r", encoding="utf-8") as f:
             return {"case_type": case_type, "text": f.read().strip()}
     raise HTTPException(status_code=404, detail=f"File {filename} not found")
+
+class DisruptionAnalysisRequest(BaseModel):
+    text: str
+    api_key: Optional[str] = None
 
 @app.post("/api/analyze")
 async def analyze_disruption(payload: DisruptionAnalysisRequest):

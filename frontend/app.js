@@ -1,4 +1,5 @@
 // NEXCHAIN // SUPPLY CHAIN CONTROL TOWER — Frontend Engine
+const API_BASE = (window.location.port !== "8000") ? "http://127.0.0.1:8000" : "";
 let currentAnalysisData = null;
 let currentDbData = null;
 
@@ -44,7 +45,7 @@ function switchTab(tabId) {
 // 2. Load Preset Demo Cases
 async function loadDemoCase(caseType) {
     try {
-        const response = await fetch(`/api/cases/${caseType}`);
+        const response = await fetch(`${API_BASE}/api/cases/${caseType}`);
         if (!response.ok) throw new Error("Failed to load demo case");
         const data = await response.json();
         
@@ -79,7 +80,7 @@ async function runAnalysis() {
     `;
 
     try {
-        const response = await fetch("/api/analyze", {
+        const response = await fetch(`${API_BASE}/api/analyze`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text: text, api_key: apiKey || null })
@@ -808,7 +809,7 @@ function updateDashboardMetrics(impactData) {
 // 15. Database Browser Manager
 async function loadDatabaseSummary() {
     try {
-        const response = await fetch("/api/data/summary");
+        const response = await fetch(`${API_BASE}/api/data/summary`);
         if (!response.ok) return;
         currentDbData = await response.json();
         renderDbTable("suppliers");
@@ -858,7 +859,7 @@ async function openOrderEvidenceModal(orderId) {
 
 async function openEvidenceModal(evidenceKey) {
     try {
-        const response = await fetch(`/api/evidence/${evidenceKey}`);
+        const response = await fetch(`${API_BASE}/api/evidence/${evidenceKey}`);
         if (!response.ok) throw new Error("Failed to load evidence");
         const evidence = await response.json();
 
