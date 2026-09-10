@@ -3,6 +3,20 @@ import json
 import re
 from typing import Dict, Any, List
 
+# Auto-load .env file if available
+dotenv_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+if os.path.exists(dotenv_path):
+    try:
+        with open(dotenv_path, "r", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    if k.strip() not in os.environ:
+                        os.environ[k.strip()] = v.strip().strip('"').strip("'")
+    except Exception as e:
+        pass
+
 # Try importing Google GenAI SDK if available
 try:
     import google.generativeai as genai
